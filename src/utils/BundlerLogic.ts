@@ -224,23 +224,17 @@ export const generateWebComponent = async (
       </style>
       ${htmlContent}
     \`;
-
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
   initializeScripts() {
-    ${combinedJS ? `
-    // Execute component scripts in isolated scope
     (function() {
-      'use strict';
       const shadowRoot = this.shadowRoot;
       ${combinedJS}
     }).call(this);
-    ` : '// No scripts to initialize'}
   }
 }
 
-// Register the custom element
 customElements.define('${componentName.toLowerCase().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}', ${componentName});
 `;
 

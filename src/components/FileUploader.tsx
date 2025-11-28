@@ -65,8 +65,8 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         <div className="w-full">
             <div
                 className={`border-2 border-dashed rounded-xl p-8 transition-all duration-200 cursor-pointer ${isDragging
-                        ? 'border-amber-500 bg-amber-50 scale-[1.02]'
-                        : 'border-amber-300 bg-white hover:bg-amber-50 hover:border-amber-400'
+                    ? 'border-amber-500 bg-amber-50 scale-[1.02]'
+                    : 'border-amber-300 bg-white hover:bg-amber-50 hover:border-amber-400'
                     }`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
@@ -108,7 +108,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                     <h4 className="text-lg font-semibold text-amber-900 mb-3">
                         Uploaded Files ({uploadedFiles.length})
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                         {uploadedFiles.map((file, index) => (
                             <div
                                 key={index}
