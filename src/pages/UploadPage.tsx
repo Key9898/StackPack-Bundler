@@ -59,6 +59,7 @@ export const UploadPage: React.FC = () => {
         }
     };
 
+
     const handlePreview = async () => {
         if (!validateFiles()) return;
 
@@ -68,24 +69,34 @@ export const UploadPage: React.FC = () => {
 
             let contentToPreview = result.content;
             if (outputType === 'js') {
-                // Wrap JS component in a demo HTML page for preview
-                const tagName = componentName.toLowerCase().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-                contentToPreview = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <style>body { font-family: sans-serif; padding: 20px; }</style>
-                    </head>
-                    <body>
-                        <h3>Component Preview: &lt;${tagName}&gt;</h3>
-                        <hr/>
-                        <${tagName}></${tagName}>
-                        <script>
-                            ${result.content}
-                        </script>
-                    </body>
-                    </html>
-                `;
+                // Generate the custom element tag name from component name
+                const tagName = componentName
+                    .replace(/([a-z])([A-Z])/g, '$1-$2')
+                    .toLowerCase();
+
+                // Create a complete HTML page that renders the Web Component
+                contentToPreview = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Preview</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <${tagName}></${tagName}>
+    
+    <script>
+${result.content}
+    </script>
+</body>
+</html>`;
             }
 
             setPreviewContent(contentToPreview);
@@ -97,6 +108,7 @@ export const UploadPage: React.FC = () => {
             setIsProcessing(false);
         }
     };
+
 
     const handleGenerate = async () => {
         if (!validateFiles()) return;

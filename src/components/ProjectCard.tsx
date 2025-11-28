@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Calendar, FileCode } from 'lucide-react';
+import { Download, Calendar, FileCode, Files } from 'lucide-react';
 
 export interface Project {
     id: string;
@@ -27,39 +27,44 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDownload })
     };
 
     return (
-        <div className="card group hover:border-amber-300">
+        <div className="bg-white border border-orange-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-amber-400 transition-all duration-300 group cursor-pointer">
+            {/* Header Section */}
             <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg">
-                        <FileCode className="w-5 h-5 text-amber-600" />
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl group-hover:from-amber-200 group-hover:to-orange-200 transition-colors duration-300 flex-shrink-0">
+                        <FileCode className="w-6 h-6 text-amber-600" />
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-amber-900 text-lg">
+                    <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-amber-900 text-lg truncate mb-1">
                             {project.name}
                         </h3>
-                        <span className="text-xs text-amber-600 uppercase font-medium">
-                            {project.outputType === 'html' ? 'Standalone HTML' : 'Web Component'}
+                        <span className="inline-block px-2 py-1 text-xs text-amber-700 bg-amber-50 rounded-md font-medium uppercase tracking-wide">
+                            {project.outputType === 'html' ? '📄 HTML' : '⚙️ Component'}
                         </span>
                     </div>
                 </div>
 
                 <button
                     onClick={() => onDownload(project)}
-                    className="p-2 hover:bg-amber-100 rounded-lg transition-colors duration-200 group-hover:scale-110 transform"
-                    title="Download"
+                    className="p-2.5 hover:bg-amber-100 rounded-xl transition-all duration-200 group-hover:scale-110 transform flex-shrink-0 ml-2"
+                    title="Download Project"
                 >
-                    <Download className="w-5 h-5 text-amber-600" />
+                    <Download className="w-5 h-5 text-amber-600 group-hover:text-amber-700" />
                 </button>
             </div>
 
-            <div className="flex items-center gap-4 text-sm text-amber-700">
-                <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>{formatDate(project.createdAt)}</span>
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent mb-4"></div>
+
+            {/* Footer Section */}
+            <div className="flex items-center justify-between gap-4 text-sm">
+                <div className="flex items-center gap-1.5 text-amber-700">
+                    <Calendar className="w-4 h-4 flex-shrink-0" />
+                    <span className="truncate">{formatDate(project.createdAt)}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                    <FileCode className="w-4 h-4" />
-                    <span>{project.fileCount} files</span>
+                <div className="flex items-center gap-1.5 text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg">
+                    <Files className="w-4 h-4 flex-shrink-0" />
+                    <span className="font-semibold">{project.fileCount}</span>
                 </div>
             </div>
         </div>
