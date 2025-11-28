@@ -31,42 +31,66 @@ export const readFileAsText = (file: File): Promise<string> => {
 };
 
 /**
- * Create a map of image filenames to their Base64 data
+ * Create a map of filenames to their Base64 data (Images & Videos)
  */
-export const createImageMap = async (images: File[]): Promise<Map<string, string>> => {
-    const imageMap = new Map<string, string>();
+export const createAssetMap = async (files: File[]): Promise<Map<string, string>> => {
+    const assetMap = new Map<string, string>();
 
-    for (const image of images) {
-        const base64 = await fileToBase64(image);
-        imageMap.set(image.name, base64);
+    for (const file of files) {
+        const base64 = await fileToBase64(file);
+        assetMap.set(file.name, base64);
     }
 
-    return imageMap;
+    return assetMap;
 };
 
 /**
- * Replace image URLs in CSS with Base64 data
+ * Replace asset URLs in CSS with Base64 data
  */
-export const replaceImageUrlsInCSS = (cssContent: string, imageMap: Map<string, string>): string => {
+export const replaceAssetUrlsInCSS = (cssContent: string, assetMap: Map<string, string>): string => {
     let updatedCSS = cssContent;
 
     // Match url() patterns in CSS
     const urlPattern = /url\(['"]?([^'"()]+)['"]?\)/gi;
 
-    updatedCSS = updatedCSS.replace(urlPattern, (match, imagePath) => {
+    updatedCSS = updatedCSS.replace(urlPattern, (match, assetPath) => {
         // Extract filename from path (handle both ./ and ../ and absolute paths)
-        const filename = imagePath.split('/').pop()?.split('\\').pop();
+        const filename = assetPath.split('/').pop()?.split('\\').pop();
 
-        if (filename && imageMap.has(filename)) {
-            const base64Data = imageMap.get(filename);
+        if (filename && assetMap.has(filename)) {
+            const base64Data = assetMap.get(filename);
             return `url('${base64Data}')`;
         }
 
-        // If image not found, keep original
+        // If asset not found, keep original
         return match;
     });
 
     return updatedCSS;
+};
+
+/**
+ * Replace asset URLs in HTML with Base64 data (img src, video src, source src)
+ */
+export const replaceAssetUrlsInHTML = (htmlContent: string, assetMap: Map<string, string>): string => {
+    let updatedHTML = htmlContent;
+
+    // Match src="..." patterns in HTML
+    // This covers <img src="...">, <video src="...">, <source src="...">, <script src="...">
+    const srcPattern = /src=['"]([^'"]+)['"]/gi;
+
+    updatedHTML = updatedHTML.replace(srcPattern, (match, assetPath) => {
+        const filename = assetPath.split('/').pop()?.split('\\').pop();
+
+        if (filename && assetMap.has(filename)) {
+            const base64Data = assetMap.get(filename);
+            return `src="${base64Data}"`;
+        }
+
+        return match;
+    });
+
+    return updatedHTML;
 };
 
 /**
@@ -91,13 +115,17 @@ export const generateStandaloneHTML = async (
     const cssContents = await Promise.all(sortedFiles.css.map(readFileAsText));
     const jsContents = await Promise.all(sortedFiles.js.map(readFileAsText));
 
-    // Create image map
-    const imageMap = await createImageMap(sortedFiles.images);
+    // Create asset map (Images + Videos)
+    const allAssets = [...sortedFiles.images, ...sortedFiles.videos];
+    const assetMap = await createAssetMap(allAssets);
 
-    // Process CSS to replace image URLs
+    // Process CSS to replace asset URLs
     const processedCSS = cssContents
-        .map((css) => replaceImageUrlsInCSS(css, imageMap))
+        .map((css) => replaceAssetUrlsInCSS(css, assetMap))
         .join('\n\n');
+
+    // Process HTML to replace asset URLs
+    const processedHTMLContents = htmlContents.map(html => replaceAssetUrlsInHTML(html, assetMap));
 
     // Wrap JS in IIFE
     const processedJS = jsContents
@@ -105,7 +133,7 @@ export const generateStandaloneHTML = async (
         .join('\n\n');
 
     // Combine HTML (use first HTML file as base, or create default)
-    const baseHTML = htmlContents[0] || '<!DOCTYPE html><html><head></head><body></body></html>';
+    const baseHTML = processedHTMLContents[0] || '<!DOCTYPE html><html><head></head><body></body></html>';
 
     // Insert CSS and JS into HTML
     let finalHTML = baseHTML;
@@ -130,7 +158,10 @@ export const generateStandaloneHTML = async (
         }
     }
 
-    const filename = customFileName || 'bundle.html';
+    // Use custom filename if provided
+    const filename = customFileName && customFileName.trim() !== ''
+        ? customFileName
+        : 'bundle';
 
     return {
         content: finalHTML,
@@ -151,16 +182,20 @@ export const generateWebComponent = async (
     const cssContents = await Promise.all(sortedFiles.css.map(readFileAsText));
     const jsContents = await Promise.all(sortedFiles.js.map(readFileAsText));
 
-    // Create image map
-    const imageMap = await createImageMap(sortedFiles.images);
+    // Create asset map (Images + Videos)
+    const allAssets = [...sortedFiles.images, ...sortedFiles.videos];
+    const assetMap = await createAssetMap(allAssets);
 
-    // Process CSS to replace image URLs
+    // Process CSS to replace asset URLs
     const processedCSS = cssContents
-        .map((css) => replaceImageUrlsInCSS(css, imageMap))
+        .map((css) => replaceAssetUrlsInCSS(css, assetMap))
         .join('\n\n');
 
+    // Process HTML to replace asset URLs
+    const processedHTMLContents = htmlContents.map(html => replaceAssetUrlsInHTML(html, assetMap));
+
     // Get HTML content (extract body content if available)
-    let htmlContent = htmlContents.join('\n\n');
+    let htmlContent = processedHTMLContents.join('\n\n');
     const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
     if (bodyMatch) {
         htmlContent = bodyMatch[1];
@@ -209,7 +244,10 @@ export const generateWebComponent = async (
 customElements.define('${componentName.toLowerCase().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}', ${componentName});
 `;
 
-    const filename = customFileName || 'component.js';
+    // Use custom filename if provided
+    const filename = customFileName && customFileName.trim() !== ''
+        ? customFileName
+        : 'component';
 
     return {
         content: webComponentCode,

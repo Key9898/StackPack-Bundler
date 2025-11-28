@@ -5,6 +5,7 @@ export interface SortedFiles {
     css: File[];
     js: File[];
     images: File[];
+    videos: File[];
 }
 
 export const useFileSorter = () => {
@@ -13,6 +14,7 @@ export const useFileSorter = () => {
         css: [],
         js: [],
         images: [],
+        videos: [],
     });
 
     const sortFiles = useCallback((files: File[]) => {
@@ -21,6 +23,7 @@ export const useFileSorter = () => {
             css: [],
             js: [],
             images: [],
+            videos: [],
         };
 
         files.forEach((file) => {
@@ -50,6 +53,10 @@ export const useFileSorter = () => {
                 case 'ico':
                     sorted.images.push(file);
                     break;
+                case 'mp4':
+                case 'webm':
+                    sorted.videos.push(file);
+                    break;
                 default:
                     console.warn(`Unsupported file type: ${file.name}`);
             }
@@ -65,6 +72,7 @@ export const useFileSorter = () => {
             css: [],
             js: [],
             images: [],
+            videos: [],
         });
     }, []);
 

@@ -4,7 +4,11 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     signOut as firebaseSignOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    type UserCredential
 } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 
@@ -12,6 +16,8 @@ export interface AuthContextType {
     user: User | null;
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
+    signInWithEmail: (email: string, password: string) => Promise<UserCredential>;
+    signUpWithEmail: (email: string, password: string, username: string) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -52,6 +58,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const signInWithEmail = async (email: string, password: string) => {
+        try {
+            return await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.error('Error signing in with Email:', error);
+            throw error;
+        }
+    };
+
+    const signUpWithEmail = async (email: string, password: string, username: string) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, {
+                displayName: username
+            });
+            // Force refresh user to get displayName
+            setUser({ ...userCredential.user, displayName: username });
+        } catch (error) {
+            console.error('Error signing up:', error);
+            throw error;
+        }
+    };
+
     const signOut = async () => {
         try {
             await firebaseSignOut(auth);
@@ -65,6 +94,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         user,
         loading,
         signInWithGoogle,
+        signInWithEmail,
+        signUpWithEmail,
         signOut,
     };
 

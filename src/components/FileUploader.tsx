@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Upload, FileText, Image, Code } from 'lucide-react';
+import { Upload, FileText, Image, Code, Video } from 'lucide-react';
 
 interface FileUploaderProps {
     onFilesSelected: (files: File[]) => void;
@@ -8,7 +8,7 @@ interface FileUploaderProps {
 
 export const FileUploader: React.FC<FileUploaderProps> = ({
     onFilesSelected,
-    accept = ".html,.css,.js,.jsx,.ts,.tsx,.jpg,.jpeg,.png,.gif,.svg,.webp"
+    accept = ".html,.css,.js,.jsx,.ts,.tsx,.jpg,.jpeg,.png,.gif,.svg,.webp,.mp4,.webm"
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -54,6 +54,8 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             return <Image className="w-4 h-4 text-amber-600" />;
         } else if (['js', 'jsx', 'ts', 'tsx'].includes(ext || '')) {
             return <Code className="w-4 h-4 text-orange-600" />;
+        } else if (['mp4', 'webm'].includes(ext || '')) {
+            return <Video className="w-4 h-4 text-red-600" />;
         } else {
             return <FileText className="w-4 h-4 text-amber-700" />;
         }
@@ -62,7 +64,10 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
     return (
         <div className="w-full">
             <div
-                className={`dropzone ${isDragging ? 'dropzone-active' : ''}`}
+                className={`border-2 border-dashed rounded-xl p-8 transition-all duration-200 cursor-pointer ${isDragging
+                        ? 'border-amber-500 bg-amber-50 scale-[1.02]'
+                        : 'border-amber-300 bg-white hover:bg-amber-50 hover:border-amber-400'
+                    }`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
@@ -79,8 +84,9 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                 />
 
                 <div className="flex flex-col items-center gap-4">
-                    <div className="p-4 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full">
-                        <Upload className="w-12 h-12 text-amber-600" />
+                    <div className={`p-4 rounded-full transition-colors duration-200 ${isDragging ? 'bg-amber-200' : 'bg-gradient-to-br from-amber-100 to-orange-100'
+                        }`}>
+                        <Upload className={`w-12 h-12 ${isDragging ? 'text-amber-700' : 'text-amber-600'}`} />
                     </div>
 
                     <div className="text-center">
@@ -91,7 +97,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                             or click to browse
                         </p>
                         <p className="text-sm text-amber-600 mt-2">
-                            Supports HTML, CSS, JS, and Images
+                            Supports HTML, CSS, JS, Images, and Videos
                         </p>
                     </div>
                 </div>
