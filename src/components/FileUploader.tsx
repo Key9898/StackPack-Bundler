@@ -1,17 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, FileText, Image, Code, Video } from 'lucide-react';
 
 interface FileUploaderProps {
     onFilesSelected: (files: File[]) => void;
     accept?: string;
+    resetTrigger?: number; // Add reset trigger prop
 }
 
 export const FileUploader: React.FC<FileUploaderProps> = ({
     onFilesSelected,
-    accept = ".html,.css,.js,.jsx,.ts,.tsx,.jpg,.jpeg,.png,.gif,.svg,.webp,.mp4,.webm"
+    accept = ".html,.css,.js,.jsx,.ts,.tsx,.jpg,.jpeg,.png,.gif,.svg,.webp,.mp4,.webm",
+    resetTrigger = 0
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+    // Clear uploaded files when reset is triggered
+    useEffect(() => {
+        if (resetTrigger > 0) {
+            setUploadedFiles([]);
+        }
+    }, [resetTrigger]);
 
     const handleDragEnter = useCallback((e: React.DragEvent) => {
         e.preventDefault();

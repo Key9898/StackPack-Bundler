@@ -22,6 +22,7 @@ export const UploadPage: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [previewContent, setPreviewContent] = useState<string>('');
+    const [resetTrigger, setResetTrigger] = useState(0);
 
     const handleFilesSelected = (files: File[]) => {
         sortFiles(files);
@@ -137,14 +138,15 @@ export const UploadPage: React.FC = () => {
         setCustomFileName('');
         setPreviewContent('');
         setShowPreview(false);
+        setResetTrigger(prev => prev + 1); // Trigger FileUploader reset
     };
 
     const totalFiles = getTotalFileCount();
     const canGenerate = totalFiles > 0 && !isProcessing;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-12 px-4">
-            <div className="max-w-5xl mx-auto">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-8 sm:py-12 px-4">
+            <div className="max-w-5xl mx-auto w-full">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <div className="flex items-center justify-center gap-3 mb-4">
@@ -168,7 +170,7 @@ export const UploadPage: React.FC = () => {
                             <Sparkles className="w-6 h-6 text-amber-600" />
                             Upload Files
                         </h2>
-                        <FileUploader onFilesSelected={handleFilesSelected} />
+                        <FileUploader onFilesSelected={handleFilesSelected} resetTrigger={resetTrigger} />
                     </div>
 
                     {/* File Summary */}
