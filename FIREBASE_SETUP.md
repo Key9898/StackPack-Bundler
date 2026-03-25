@@ -58,6 +58,7 @@ service cloud.firestore {
 ## Step 5: Configure Your Application
 
 1. Create a `.env` file in your project root:
+
    ```bash
    cp .env.example .env
    ```
@@ -82,6 +83,7 @@ service cloud.firestore {
 ## Step 6: Test Your Setup
 
 1. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -101,6 +103,7 @@ service cloud.firestore {
 ### "Firebase: Error (auth/unauthorized-domain)"
 
 **Solution**: Add your domain to authorized domains
+
 1. Go to Firebase Console → Authentication → Settings
 2. Scroll to "Authorized domains"
 3. Add `localhost` and any other domains you're using
@@ -108,13 +111,15 @@ service cloud.firestore {
 ### "Missing or insufficient permissions"
 
 **Solution**: Check your Firestore security rules
+
 1. Go to Firestore Database → Rules
 2. Make sure you're in test mode or have proper rules set up
 3. Publish the rules
 
 ### Environment variables not loading
 
-**Solution**: 
+**Solution**:
+
 1. Make sure your `.env` file is in the project root
 2. Restart the development server after changing `.env`
 3. Variable names must start with `VITE_` for Vite to expose them

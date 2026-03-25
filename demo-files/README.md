@@ -24,26 +24,31 @@ This folder contains sample files you can use to test the StackPack Bundler.
 ### Method 2: Test Individual Features
 
 **Test 1: HTML + CSS Only**
+
 - Upload only `demo.html` and `demo.css`
 - See how styles are embedded
 
 **Test 2: Add JavaScript**
+
 - Upload `demo.html`, `demo.css`, and `demo.js`
 - Click the button in the output to see the interactive effect
 
 **Test 3: Full Bundle with Images**
+
 - Upload all 4 files
 - Notice how the image in CSS (`url('./demo.png')`) is automatically converted to Base64
 
 ## Expected Results
 
 ### Standalone HTML Output
+
 - Single `.html` file
 - All CSS embedded in `<style>` tags
 - All JS wrapped in IIFE and embedded in `<script>` tags
 - Image converted to Base64 data URL in CSS
 
 ### Web Component Output
+
 - Single `.js` file
 - Creates a custom element (e.g., `<stack-pack-component>`)
 - Uses Shadow DOM for style isolation
@@ -60,20 +65,24 @@ This folder contains sample files you can use to test the StackPack Bundler.
 ## Troubleshooting
 
 **Image not showing?**
+
 - Make sure you uploaded `demo.png`
 - Check that the CSS references `./demo.png` (relative path)
 
 **JavaScript not working?**
+
 - Open browser console (F12) to check for errors
 - Look for the "StackPack Demo Script Loaded!" message
 
 **Styles not applied?**
+
 - For Web Components, styles are in Shadow DOM
 - Use browser DevTools to inspect the shadow root
 
 ## Next Steps
 
 After testing with these demo files, try creating your own:
+
 1. Create your own HTML/CSS/JS files
 2. Add your own images
 3. Bundle them together

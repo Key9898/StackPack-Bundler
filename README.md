@@ -5,6 +5,7 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
 ## ✨ Features
 
 ### 🎯 Core Functionality
+
 - **Smart Unified Upload**: Single dropzone that automatically sorts files by extension (HTML, CSS, JS, Images)
 - **Shadow DOM Isolation**: Web Component output uses Shadow DOM to prevent style conflicts
 - **Base64 Image Encoding**: Automatically converts images to Base64 and replaces CSS `url()` references
@@ -14,19 +15,38 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
   - **Web Component**: Reusable `.js` component with Shadow DOM encapsulation
 
 ### 🔐 Authentication & Storage
-- Google Sign-In integration via Firebase Auth
-- Project history saved to Cloud Firestore (for authenticated users)
-- Dashboard to view and re-download previous projects
 
-### 🎨 Design
+- Google Sign-In integration via Firebase Auth
+- Email/Password authentication with Sign Up / Sign In
+- Password visibility toggle (Eye/EyeOff icon) in auth form
+- Project history saved to Cloud Firestore (for authenticated users)
+- Dashboard to view, re-download, delete, and share previous projects
+- Public/private project visibility toggle (Globe = public, Lock = private)
+- Shareable project links — share bundles with anyone via URL (`?project=ID`)
+
+### 🎨 Design & UX
+
 - Beautiful amber/orange/yellow muted color theme
-- Smooth animations and transitions
-- Responsive design for all screen sizes
-- Professional, modern UI with glassmorphism effects
+- Dark mode with toggle button and localStorage persistence
+- Responsive design with mobile hamburger navigation menu
+- Loading skeleton cards during Dashboard data fetch
+- Confirmation dialogs for all destructive actions (delete, reset)
+- Toast notifications replacing all browser alerts
+- Progress indicator messages during bundle generation
+- Cancel button to abort long-running operations
+- Keyboard shortcuts: `Ctrl+1` Upload, `Ctrl+2` Dashboard, `Ctrl+Enter` Generate, `Ctrl+R` Reset
+- Keyboard shortcuts popup (click "Shortcuts" button in Upload page)
+
+### 📱 PWA Support
+
+- Install as a native-like app on desktop and mobile
+- Service worker with offline caching (`public/sw.js`)
+- Web App Manifest (`public/manifest.json`)
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v18 or higher recommended)
 - npm or yarn
 - Firebase project (for authentication and storage features)
@@ -34,12 +54,14 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <your-repo-url>
    cd stackpack-bundler
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -51,11 +73,13 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
    - Copy your Firebase configuration
 
 4. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` and add your Firebase credentials:
+
    ```env
    VITE_FIREBASE_API_KEY=your-api-key
    VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
@@ -66,6 +90,7 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
    ```
 
 5. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -98,24 +123,26 @@ A powerful client-side web application for bundling HTML, CSS, JavaScript, and i
 ### Using Generated Files
 
 #### Standalone HTML
+
 Simply open the generated `.html` file in any browser. All styles, scripts, and images are embedded.
 
 #### Web Component
+
 Include the generated `.js` file in your HTML:
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My App</title>
-</head>
-<body>
-  <!-- Use your custom component -->
-  <stack-pack-component></stack-pack-component>
-  
-  <!-- Include the component script -->
-  <script src="component.js"></script>
-</body>
+  <head>
+    <title>My App</title>
+  </head>
+  <body>
+    <!-- Use your custom component -->
+    <stack-pack-component></stack-pack-component>
+
+    <!-- Include the component script -->
+    <script src="component.js"></script>
+  </body>
 </html>
 ```
 
@@ -123,22 +150,33 @@ Include the generated `.js` file in your HTML:
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── FileUploader.tsx    # Drag-and-drop file upload
-│   ├── Header.tsx          # Navigation and auth
-│   └── ProjectCard.tsx     # Project display card
-├── hooks/              # Custom React hooks
-│   └── useFileSorter.ts    # File sorting logic
-├── pages/              # Main application pages
-│   ├── Dashboard.tsx       # Project history
-│   └── UploadPage.tsx      # Main upload interface
-├── utils/              # Utility functions
-│   └── BundlerLogic.ts     # Core bundling logic
-├── App.tsx             # Main application component
-├── AuthContext.tsx     # Authentication context
-├── firebaseConfig.ts   # Firebase initialization
-├── index.css           # Global styles & Tailwind
-└── main.tsx            # Application entry point
+├── components/              # Modular components (each in own folder)
+│   ├── AuthModal/           # Sign In / Sign Up modal with password toggle
+│   ├── ConfirmDialog/       # Reusable confirmation dialog
+│   ├── ErrorBoundary/       # React error boundary with fallback UI
+│   ├── FileUploader/        # Drag-and-drop with size validation
+│   ├── Header/              # Navigation + dark mode + mobile menu
+│   ├── KeyboardHints/       # Keyboard shortcuts popup
+│   ├── ProjectCard/         # Project card with actions
+│   └── ProjectCardSkeleton/ # Loading skeleton for Dashboard
+├── contexts/                # React contexts
+│   ├── AuthContext.tsx      # Firebase Auth
+│   ├── ThemeContext.tsx     # Dark/light mode
+│   └── ToastContext.tsx     # Toast notifications
+├── hooks/                   # Custom React hooks
+│   ├── useFileSorter.ts     # File sorting logic
+│   └── useKeyboardShortcuts.ts # Global keyboard shortcuts
+├── pages/                   # Page-level components
+│   ├── Dashboard.tsx        # Project history with visibility toggle
+│   ├── SharedView.tsx       # Public project view (?project=ID)
+│   └── UploadPage.tsx       # Main upload interface
+├── utils/                   # Utility functions
+│   └── BundlerLogic.ts      # Core bundling logic
+├── test/                    # Test files (50 tests)
+├── App.tsx                  # Main component + SharedView routing
+├── firebaseConfig.ts        # Firebase initialization
+├── index.css                # Global styles + Tailwind v4 @theme
+└── main.tsx                 # Entry point + service worker registration
 ```
 
 ## 🔧 Technical Details
@@ -167,11 +205,13 @@ src/
    - **Component Mode**: Creates a Web Component class with Shadow DOM
 
 ### Shadow DOM Benefits
+
 - Style encapsulation (no CSS leakage)
 - DOM isolation (no ID/class conflicts)
 - Reusable across different pages
 
 ### Zero Backend Architecture
+
 - All processing happens in the browser
 - No server-side code required
 - Firebase used only for auth and storage (optional)
@@ -179,21 +219,19 @@ src/
 ## 🎨 Customization
 
 ### Changing Theme Colors
-Edit `tailwind.config.js` to modify the color palette:
 
-```javascript
-theme: {
-  extend: {
-    colors: {
-      amber: {
-        // Your custom colors
-      },
-    },
-  },
+Edit the `@theme` directive in `src/index.css` (Tailwind CSS v4):
+
+```css
+@theme {
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  /* Add your custom colors here */
 }
 ```
 
 ### Adding File Type Support
+
 Edit `src/hooks/useFileSorter.ts` to add new file extensions:
 
 ```typescript

@@ -3,12 +3,14 @@
 Get started with StackPack Bundler in 5 minutes!
 
 ## Prerequisites
+
 - Node.js installed (v18+)
 - A Google account (for authentication features)
 
 ## Installation
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
@@ -23,11 +25,13 @@ If you want to save projects and use authentication:
 4. Copy your Firebase config
 
 Create a `.env` file:
+
 ```bash
 cp .env.example .env
 ```
 
 Edit `.env` and add your Firebase credentials:
+
 ```env
 VITE_FIREBASE_API_KEY=your-api-key
 VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
@@ -40,6 +44,7 @@ VITE_FIREBASE_APP_ID=your-app-id
 **Note**: The app works without Firebase, but you won't be able to save projects.
 
 ### 3. Start Development Server
+
 ```bash
 npm run dev
 ```
@@ -61,6 +66,7 @@ The easiest way to test the bundler is with the included demo files:
 5. **Open the downloaded file** to see the result!
 
 ### What You Should See
+
 - A purple gradient card with "Welcome to StackPack Demo"
 - A clickable button that creates confetti animation
 - An image displayed in the demo box (converted from Base64)
@@ -68,7 +74,9 @@ The easiest way to test the bundler is with the included demo files:
 ## Creating Your Own Bundle
 
 ### Step 1: Prepare Your Files
+
 Organize your project files:
+
 ```
 my-project/
 ├── index.html
@@ -80,6 +88,7 @@ my-project/
 ```
 
 ### Step 2: Upload Files
+
 1. Open StackPack Bundler
 2. Drag all files into the dropzone (HTML, CSS, JS, images)
 3. The app automatically sorts them by type
@@ -87,12 +96,14 @@ my-project/
 ### Step 3: Configure Output
 
 **For Standalone HTML:**
+
 - Choose "Standalone HTML"
 - Enter a custom filename (optional)
 - Click "Generate & Download"
 - You'll get a single `.html` file with everything embedded
 
 **For Web Component:**
+
 - Choose "Web Component"
 - Enter a component name (e.g., "MyAwesomeComponent")
 - Enter a custom filename (optional)
@@ -106,23 +117,26 @@ Just open the `.html` file in any browser. It works offline!
 
 **Web Component:**
 Include in your HTML:
+
 ```html
 <!DOCTYPE html>
 <html>
-<body>
-  <!-- Use your component -->
-  <my-awesome-component></my-awesome-component>
-  
-  <!-- Include the script -->
-  <script src="my-awesome-component.js"></script>
-</body>
+  <body>
+    <!-- Use your component -->
+    <my-awesome-component></my-awesome-component>
+
+    <!-- Include the script -->
+    <script src="my-awesome-component.js"></script>
+  </body>
 </html>
 ```
 
 ## Tips & Tricks
 
 ### Image Paths in CSS
+
 The bundler automatically converts these:
+
 ```css
 /* Before */
 .hero {
@@ -136,18 +150,23 @@ The bundler automatically converts these:
 ```
 
 Just make sure:
+
 - ✅ Upload the image file
 - ✅ Use relative paths in CSS
 - ✅ Filename matches exactly
 
 ### Multiple CSS/JS Files
+
 You can upload multiple files of the same type:
+
 - All CSS files are combined
 - All JS files are combined and wrapped in IIFE
 - Order may vary, so avoid dependencies between files
 
 ### Shadow DOM Benefits
+
 When using Web Components:
+
 - Styles don't leak out
 - External styles don't leak in
 - Perfect for reusable components
@@ -156,16 +175,19 @@ When using Web Components:
 ## Common Issues
 
 ### "Image not showing in output"
+
 - Make sure you uploaded the image file
 - Check the filename matches exactly (case-sensitive)
 - Verify the path in CSS is relative (./image.png)
 
 ### "JavaScript not working"
+
 - Check browser console for errors
 - Make sure you're using standard JavaScript (not ES modules)
 - For Web Components, scripts run in Shadow DOM context
 
 ### "Can't save projects"
+
 - You need to sign in with Google
 - Firebase must be configured (see FIREBASE_SETUP.md)
 - Check browser console for Firebase errors
