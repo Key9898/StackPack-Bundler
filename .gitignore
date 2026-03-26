@@ -23,6 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# AI assistant config folders
+.agents/
+.claude/
+.trae/
+
 # Environment variables
 .env
 
