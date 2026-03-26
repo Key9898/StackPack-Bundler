@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Dashboard } from '../pages/Dashboard';
 
-// All mocks must be at top level (hoisted by vitest)
 vi.mock('../firebaseConfig', () => ({ db: {} }));
 
 vi.mock('../AuthContext', () => ({
@@ -18,7 +17,7 @@ vi.mock('../services/FirebaseService', () => ({
     fetchUserProjects: vi.fn(),
     deleteProject: vi.fn(),
     updateVisibility: vi.fn(),
-  }
+  },
 }));
 
 vi.mock('../utils/BundlerLogic', () => ({
@@ -33,7 +32,9 @@ describe('Dashboard — unauthenticated', () => {
 
   it('shows the sign in description message', () => {
     render(<Dashboard />);
-    expect(screen.getByText(/Please sign in to view and manage your bundled projects/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Please sign in to view and manage your bundled projects/i)
+    ).toBeInTheDocument();
   });
 
   it('does not show project grid when unauthenticated', () => {

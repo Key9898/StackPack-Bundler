@@ -148,28 +148,49 @@ test: add unit tests for BundlerLogic
 src/
 ├── components/           # Modular components (each in own folder)
 │   ├── AuthModal/
-│   │   ├── AuthModal.tsx     # Sign In / Sign Up modal with password toggle
+│   │   ├── AuthModal.tsx         # Sign In / Sign Up modal with password toggle
+│   │   ├── AuthModal.types.ts    # TypeScript interfaces
+│   │   ├── AuthModal.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── ConfirmDialog/
-│   │   ├── ConfirmDialog.tsx # Reusable confirmation dialog (danger/warning variants)
+│   │   ├── ConfirmDialog.tsx         # Reusable confirmation dialog (danger/warning variants)
+│   │   ├── ConfirmDialog.types.ts    # TypeScript interfaces
+│   │   ├── ConfirmDialog.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── ErrorBoundary/
-│   │   ├── ErrorBoundary.tsx # React error boundary with fallback UI
+│   │   ├── ErrorBoundary.tsx         # React error boundary with fallback UI
+│   │   ├── ErrorBoundary.types.ts    # TypeScript interfaces
+│   │   ├── ErrorBoundary.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── FileUploader/
-│   │   ├── FileUploader.tsx  # Drag-and-drop uploader with file size validation
+│   │   ├── FileUploader.tsx         # Drag-and-drop uploader with file size validation
+│   │   ├── FileUploader.types.ts    # TypeScript interfaces
+│   │   ├── FileUploader.stories.tsx # Storybook stories
+│   │   └── index.ts
+│   ├── Footer/
+│   │   ├── Footer.tsx         # Footer component
+│   │   ├── Footer.types.ts    # TypeScript interfaces
+│   │   ├── Footer.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── Header/
-│   │   ├── Header.tsx        # Navigation + dark mode toggle + mobile hamburger menu
+│   │   ├── Header.tsx         # Navigation + dark mode toggle + mobile hamburger menu
+│   │   ├── Header.types.ts    # TypeScript interfaces
+│   │   ├── Header.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── KeyboardHints/
-│   │   ├── KeyboardHints.tsx # Floating shortcuts popup (Ctrl+1/2/Enter/R)
+│   │   ├── KeyboardHints.tsx         # Floating shortcuts popup (Ctrl+1/2/Enter/R)
+│   │   ├── KeyboardHints.types.ts    # TypeScript interfaces
+│   │   ├── KeyboardHints.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   ├── ProjectCard/
-│   │   ├── ProjectCard.tsx   # Project card with download/delete/share/visibility
+│   │   ├── ProjectCard.tsx         # Project card with download/delete/share/visibility
+│   │   ├── ProjectCard.types.ts    # TypeScript interfaces
+│   │   ├── ProjectCard.stories.tsx # Storybook stories
 │   │   └── index.ts
 │   └── ProjectCardSkeleton/
-│       ├── ProjectCardSkeleton.tsx # Loading skeleton for Dashboard
+│       ├── ProjectCardSkeleton.tsx         # Loading skeleton for Dashboard
+│       ├── ProjectCardSkeleton.types.ts    # TypeScript interfaces
+│       ├── ProjectCardSkeleton.stories.tsx # Storybook stories
 │       └── index.ts
 ├── pages/                # Page-level components (flat files)
 │   ├── Dashboard.tsx     # Project list with delete, share, visibility toggle
@@ -257,8 +278,8 @@ Each component should have its own folder:
 ComponentName/
 ├── ComponentName.tsx        # UI implementation (Dumb)
 ├── ComponentName.types.ts   # TypeScript interfaces/types
+├── ComponentName.stories.tsx # Storybook stories (required for all components)
 ├── ComponentName.test.tsx   # Unit tests (optional)
-├── ComponentName.stories.tsx # Storybook stories (optional)
 └── index.ts                 # Public API (barrel export)
 ```
 
