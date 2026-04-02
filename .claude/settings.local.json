@@ -14,7 +14,8 @@
       "Bash(ls -la postcss.config* tailwind.config*)",
       "Bash(node -e \"const d=require\\(''''fs''''\\).readFileSync\\(''''/dev/stdin'''',''''utf8''''\\); const p=JSON.parse\\(d\\); console.log\\(''''deps:'''', JSON.stringify\\({...p.dependencies,...p.devDependencies}, null, 2\\)\\)\")",
       "Bash(find 'C:\\\\Users\\\\keych\\\\Development\\\\Projects\\\\Personal\\\\StackPack Bundler' -name *.rules -o -name firestore* -o -name firebase.json)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }
